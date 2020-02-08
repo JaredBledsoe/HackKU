@@ -1,4 +1,4 @@
-function Player(ws) {
+function Client(ws) {
 	console.log('awdawdad');
 
 	this.id = Math.random();
@@ -6,4 +6,4 @@ function Player(ws) {
 
 }
 
-module.exports = exports = Player;
+module.exports = exports = Client;

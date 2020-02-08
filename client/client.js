@@ -9,7 +9,7 @@ ws.onclose = function() {
 }
 
 var initReady = setInterval(function() {
-	if (ws.readyState == 1) {
+	if (ws.readyState === 1) {
 		clearInterval(initReady);
 
 		initGame();
@@ -19,3 +19,25 @@ var initReady = setInterval(function() {
 }, 100);
 
 var currentGameId = null;
+
+function initGame() {
+	// Tell server ready to start playing
+	ws.send(
+		JSON.stringify({
+			type: "init",
+			gameId: currentGameId
+		})
+	);
+	console.log('client side game started');
+}
+
+var paddle = {
+	x: 0,
+	y: 0,
+	w: 100,
+	h: 50
+}
+
+document.addEventListener('keydown', function(e) {
+	console.log(e.keyCode);
+});
