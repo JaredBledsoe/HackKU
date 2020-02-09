@@ -25,6 +25,7 @@ canvas.height = 500;
 var ctx = canvas.getContext('2d');
 var paddlesToDraw = [];
 var ball;
+
 var tone = new sound("LC.wav");
 var interacted = false;
 
@@ -109,6 +110,7 @@ function sound(src) {
 	this.sound.style.display = "none";
 	this.readyPlay = true;
 	document.body.appendChild(this.sound);
+
 	this.play = function() {
 		this.readyPlay = false;
 		this.sound.currentTime = 0;
@@ -126,6 +128,21 @@ function sound(src) {
 
 document.addEventListener('click', function() {
 	tone.play();
+});
+
+document.addEventListener('touchstart', function(e) {
+	if (e.touches[0].clientX < window.innerWidth / 2) {
+		paddle.dir[0] = 1;
+	} else {
+		paddle.dir[1] = 1;
+
+	}
+	emit();
+});
+
+document.addEventListener('touchend', function(e) {
+	paddle.dir = [0, 0];
+	emit();
 });
 
 document.addEventListener('keydown', function(e) {
