@@ -2,8 +2,8 @@ function Ball() {
 	this.x = 250;
 	this.y = 250;
 	this.r = 10;
-	this.velX = -Math.floor(Math.random() * 8 + 5);
-	this.velY = -Math.floor(Math.random() * 8 + 5);
+	this.velX = [-6, -8, -10, -12, 6, 8, 10, 12][Math.floor(Math.random() * 8 + 1)];
+	this.velY = [-6, -8, -10, -12, 6, 8, 10, 12][Math.floor(Math.random() * 8 + 1)];
 }
 
 Ball.prototype.update = function(game) {

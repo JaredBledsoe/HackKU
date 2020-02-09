@@ -25,6 +25,9 @@ canvas.height = 500;
 var ctx = canvas.getContext('2d');
 var paddlesToDraw = [];
 var ball;
+var tone = new sound("LC.wav");
+var interacted = false;
+
 
 function initGame() {
 	// Tell server ready to start playing
@@ -97,6 +100,33 @@ function drawGame() {
 		}
 	}
 }
+
+function sound(src) {
+	this.sound = document.createElement("audio");
+	this.sound.src = src;
+	this.sound.setAttribute("preload", "auto");
+	this.sound.setAttribute("controls", "none");
+	this.sound.style.display = "none";
+	this.readyPlay = true;
+	document.body.appendChild(this.sound);
+	this.play = function() {
+		this.readyPlay = false;
+		this.sound.currentTime = 0;
+		this.sound.play();
+
+		setTimeout(function() {
+			this.readyPlay = true;
+		}.bind(this), 100);
+
+		this.stop = function() {
+			this.sound.pause();
+		}
+	}
+}
+
+document.addEventListener('click', function() {
+	tone.play();
+});
 
 document.addEventListener('keydown', function(e) {
 	if (e.keyCode === 37 || e.keyCode === 65) {

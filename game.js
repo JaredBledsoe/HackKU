@@ -52,7 +52,7 @@ Game.prototype.broadcast = function() {
 
 		// Send message to all connected clients
 		for (let i = 0; i < this.clients.length; i++) {
-			if (this.clients[i].ws && this.clients[i].ws.readyState && !this.clients[i].dead) {
+			if (this.clients[i].ws && this.clients[i].ws.readyState) {
 				this.clients[i].ws.send(JSON.stringify({
 					type: "update",
 					data: refinedClients,
