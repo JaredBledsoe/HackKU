@@ -40,8 +40,8 @@ Server.prototype.initWebsocketMessage = function initWebsocketMessage() {
 		this.games.forEach(game => game.removePlayerByWS(ws));
 
 		// Find game instance with 0 players and kill it
-		for (var i = 0; i < this.games.length; i++) {
-			if (this.games.players.length === 0) {
+		for (let i = 0; i < this.games.length; i++) {
+			if (this.games[i].clients.length === 0) {
 				this.games.splice(i, 1);
 			}
 		}
@@ -53,31 +53,28 @@ Server.prototype.initWebsocketMessage = function initWebsocketMessage() {
 			if (message && message.hasOwnProperty("gameId")) {
 
 				//Client just joined
-				if (message.type == 'init' && !ws.hasOwnProperty('playerAdded')) {
+				if (message.type === 'init' && !ws.hasOwnProperty('playerAdded')) {
 					ws.playerAdded = true;
-
 					let activeGame = this.findOpenGame();
-					let createNewGame;
 					// if no game exists or all games are full, create a new one 
-					if (this.games.length <= 0 || !activeGame) {
+					if (this.games.length <= 0 || activeGame === false) {
 						this.games.push(new Game());
-
-						this.games[this.games.length - 1].clients.push(new Player(ws));
 					}
+
+					this.games[this.games.length - 1].addPlayer(ws);
 				}
 
 				var gameId = message.gameId;
 				var game = this.games.find(game => game.id === gameId);
 
-				if (game && game.isPlayer(ws)) {
-					game.processMessage(message);
+				if (game) {
+					game.processMessage(message, ws);
 				}
 			}
 		} catch (e) {
 			console.log(e);
 		}
 	}
-
 
 	this.websocketServer.on("connection", ws => {
 		ws.on("close", close.bind(this, ws));
