@@ -6,6 +6,7 @@ function Game() {
 
 	this.clients = [];
 	this.ball = new Ball();
+	this.started = false;
 	this.start();
 }
 
@@ -26,14 +27,32 @@ Game.prototype.start = function() {
 Game.prototype.broadcast = function() {
 	try {
 		var refinedClients = [];
+		var aliveCount = 0;
 
 		for (let i = 0; i < this.clients.length; i++) {
-			refinedClients.push([this.clients[i].x, this.clients[i].y, this.clients[i].w, this.clients[i].h]);
+			if (!this.clients[i].dead) {
+				aliveCount++;
+			}
+
+			refinedClients.push([this.clients[i].x, this.clients[i].y, this.clients[i].w, this.clients[i].h, this.clients[i].dead]);
+		}
+
+		if (aliveCount === 1 && this.started) {
+			setTimeout(function() {
+				for (let i = 0; i < this.clients.length; i++) {
+					if (this.clients[i].ws && this.clients[i].ws.readyState) {
+
+						this.clients[i].ws.send(JSON.stringify({
+							type: "gameOver"
+						}));
+					}
+				}
+			}.bind(this), 2000);
 		}
 
 		// Send message to all connected clients
 		for (let i = 0; i < this.clients.length; i++) {
-			if (this.clients[i].ws.readyState) {
+			if (this.clients[i].ws && this.clients[i].ws.readyState && !this.clients[i].dead) {
 				this.clients[i].ws.send(JSON.stringify({
 					type: "update",
 					data: refinedClients,
@@ -69,6 +88,12 @@ Game.prototype.addPlayer = function(ws) {
 		gameId: this.id,
 		side: this.clients.length - 1
 	}));
+
+	if (this.clients.length === 4) {
+		setTimeout(function() {
+			this.started = true;
+		}.bind(this), 2000);
+	}
 };
 
 

@@ -1,14 +1,15 @@
 function Client(ws, side) {
 	this.id = Math.random();
-	this.ws = ws;
+	if (ws) this.ws = ws;
 	this.side = side;
-	this.x = side === 0 ? 245 : side === 1 ? 490 : side === 2 ? 245 : 0;
-	this.y = side === 0 ? 0 : side === 1 ? 245 : side === 2 ? 490 : 245;
+	this.x = side === 0 ? 200 : side === 1 ? 490 : side === 2 ? 200 : 0;
+	this.y = side === 0 ? 0 : side === 1 ? 200 : side === 2 ? 490 : 200;
 	this.w = side === 0 ? 100 : side === 2 ? 100 : 10;
 	this.h = side === 0 ? 10 : side === 2 ? 10 : 100;
 	this.velX = 0;
 	this.velY = 0;
 	this.dir = [0, 0];
+	this.dead = false;
 };
 
 Client.prototype.update = function() {

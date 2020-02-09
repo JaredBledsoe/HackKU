@@ -96,7 +96,7 @@ Server.prototype.start = function start(port = PORT) {
 
 Server.prototype.findOpenGame = function() {
 	for (let i = 0; i < this.games.length; i++) {
-		if (this.games[i].clients.length < 4) {
+		if (this.games[i].clients.length < 4 && !this.games[i].started) {
 			return i;
 		}
 	}

@@ -46,13 +46,12 @@ function initGame() {
 			canvas.style.transform = "translate(-50%, -50%) rotate(" +
 				rotateDeg + "deg)";
 
-			console.log(canvas.style.transform);
-
-
 		} else if (message.type === 'update') {
 			paddlesToDraw = message.data;
 			ball = message.ball;
 			drawGame();
+		} else if (message.type === 'gameOver') {
+			location.reload();
 		}
 	}
 }
@@ -76,6 +75,7 @@ var paddle = {
 
 function drawGame() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.fillStyle = "black";
 
 	if (ball) {
 		ctx.beginPath();
@@ -84,9 +84,17 @@ function drawGame() {
 	}
 
 	for (let i = 0; i < paddlesToDraw.length; i++) {
-		ctx.beginPath();
-		ctx.rect(paddlesToDraw[i][0], paddlesToDraw[i][1], paddlesToDraw[i][2], paddlesToDraw[i][3]);
-		ctx.fill();
+		if (!paddlesToDraw[i][4]) {
+			ctx.fillStyle = "black";
+			ctx.beginPath();
+
+			if (i === paddle.side) {
+				ctx.fillStyle = "green";
+			}
+
+			ctx.rect(paddlesToDraw[i][0], paddlesToDraw[i][1], paddlesToDraw[i][2], paddlesToDraw[i][3]);
+			ctx.fill();
+		}
 	}
 }
 
